@@ -1,5 +1,5 @@
 ---
-title: "Draft Quarto document"
+title: "^^"
 author: "Lene Halkjær"
 format: html
 ---
@@ -132,9 +132,9 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 #'
 read <- function(file_path, max_rows = 100) {
   data <- file_path |>
-    read_csv(
+    readr::read_csv(
       show_col_types = FALSE,
-      name_repair = to_snake_case,
+      name_repair = snakecase::to_snake_case,
       n_max = max_rows
     )
   return(data)
