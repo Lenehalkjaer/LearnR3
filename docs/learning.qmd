@@ -6,6 +6,7 @@ format: html
 
 ####command, shift, M er lig base pipe
 ####command, option, I er lig ny chunk
+#### command, shift, parentes er lig krøllet parantes. 
 
 ## Header 1
 
@@ -64,3 +65,25 @@ here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
     n_max = 100
   )
 ```
+
+
+
+## 16.3 - creating your first function
+#### Først skal du give din funktion et navn (her kalder vi den add_numbers), så skal du fortælle R at det er en funktion (function() og så tilføje argumenter inde i function parentesen). Vælg return for at fortælle R hvilket output du gerne vil have funktionen giver dig. 
+
+#### For at tilføje noget beskrivelse til din funktion, så stå med markøren i funktionen, tryk command, shift, P og vælg rogygen comment. Her kan du tilføjet en slags titel til hvad funktionen gør, samt hvad der skal indsættes ved de forskellige parameter samt hvad @returns gør. 
+```{r}
+#' Add two numbers together.
+#'
+#' @param num1 A number here.
+#' @param num2 A number here.
+#'
+#' @returns Returns the sum of two numbers
+#'
+add_numbers <- function(num1, num2) {
+  added <- num1 + num2
+  return(added)
+}
+```
+
+#### Herefter tryk command, shift, P og vælg "style active file", prøve at tryk "Render" for at se at det hele virker. Herefter commit tit GIT. 
