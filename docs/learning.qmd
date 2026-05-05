@@ -87,3 +87,35 @@ add_numbers <- function(num1, num2) {
 ```
 
 #### Herefter tryk command, shift, P og vælg "style active file", prøve at tryk "Render" for at se at det hele virker. Herefter commit tit GIT. 
+
+
+## Lav en funktion, der kan hente forskellige data ind. 
+
+```{r}
+#' Read in one nurses' stress data file
+#'
+#' @param a path to a data file
+#'
+#' @returns outouts a data frame / tibble
+#'
+read <- function(file_path) {
+  data <- file_path |>
+    read_csv(
+      show_col_types = FALSE,
+      name_repair = to_snake_case,
+      n_max = 100
+    )
+  return(data)
+}
+```
+
+## Så tester vi at vores nye funktion read virker
+```{r}
+here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
+  read()
+```
+## Vi øver med en ny fil
+```{r}
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read()
+```
