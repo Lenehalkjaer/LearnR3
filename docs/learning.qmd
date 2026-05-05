@@ -4,8 +4,8 @@ author: "Lene Halkjær"
 format: html
 ---
 
-#command, shift, M er lig base pipe
-#command, option, I er lig ny chunk
+####command, shift, M er lig base pipe
+####command, option, I er lig ny chunk
 
 ## Header 1
 
@@ -17,9 +17,47 @@ library(snakecase)
 
 
 ## Importing new data
-# Here fortæller R hvor den skal finde data (her skal du skrive ud i hvilken mappe den skal lede efter data, skråstregen går videre i rækken af mapper).Read_csv fortæller R, at den faktisk skal hente data. Ved at bruge hjælpefunktionen (show_col_types) inde i read_csv fjerner du Rs gæt på hvad der er i hver kolonne. Hjælpefunktionen (name_repair) inde i read_csv skriver R navnet på fx. kolonnerne ud med underscore mellem de forskellige ord og skriver alt med små bogstaver. Hjælpefunktionen n_max fortæller R kun at hente fx. 100 kolonner. Ved at stå i code cunk og trykke command+shift+p og vælge style active funktion optimerer R udseendet på din kode, så den bliver mere readibel. 
+#### Here fortæller R hvor den skal finde data (her skal du skrive ud i hvilken mappe den skal lede efter data, skråstregen går videre i rækken af mapper).Read_csv fortæller R, at den faktisk skal hente data. Ved at bruge hjælpefunktionen (show_col_types) inde i read_csv fjerner du Rs gæt på hvad der er i hver kolonne. Hjælpefunktionen (name_repair) inde i read_csv skriver R navnet på fx. kolonnerne ud med underscore mellem de forskellige ord og skriver alt med små bogstaver. Hjælpefunktionen n_max fortæller R kun at hente fx. 100 kolonner. Ved at stå i code cunk og trykke command+shift+p og vælge style active funktion optimerer R udseendet på din kode, så den bliver mere readibel. 
 ```{r}
 here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
+  read_csv(
+    show_col_types = FALSE,
+    name_repair = to_snake_case,
+    n_max = 100
+  )
+```
+
+
+## Exercise 15.6 - reading other files. 
+```{r}
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read_csv(
+    show_col_types = FALSE,
+    name_repair = to_snake_case
+  )
+```
+####Samme funktion, men nu med n_max = 100, så vi kun får 100 kolonner i stedet for 23517. 
+```{r}
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read_csv(
+    show_col_types = FALSE,
+    name_repair = to_snake_case,
+    n_max = 100
+  )
+```
+
+#### Prøv igen med en ny deltager og et nyt datasæt uden n_max
+```{r}
+here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
+  read_csv(
+    show_col_types = FALSE,
+    name_repair = to_snake_case
+  )
+```
+
+#### Prøv igen med en ny deltager og et nyt datasæt med n_max
+```{r}
+here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
   read_csv(
     show_col_types = FALSE,
     name_repair = to_snake_case,
