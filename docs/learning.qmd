@@ -7,6 +7,7 @@ format: html
 ####command, shift, M er lig base pipe
 ####command, option, I er lig ny chunk
 #### command, shift, parentes er lig krøllet parantes. 
+#### option I laver pipens første tegn
 
 ## Header 1
 
@@ -216,6 +217,69 @@ read_all("IBI.csv.gz")
 
 ```{r}
 read_all("IBI.csv.gz")
+```
+
+## exercise 19.2 - Inspecting the data
+```{r}
+hr_data <- read_all("HR.csv.gz")
+
+survey_data <- here("data-raw/nurses-stress/survey-results.csv.gz") |>
+  read()
+
+hr_data
+survey_data
+
+
+```
+### Her vil vi gerne lave en ny kolonne med id-nummer, så vi bruger mutate funktionen, fordi den kan lave nye kolonner. Vi kalder kolonnen id og siger at den skal være lig det næste vi skriver. 
+```{r}
+hr_data |> 
+  mutate(
+    id = str_extract(
+      file_path_id,
+      pattern = "/stress/[:alnum:]{2}/"
+    ) |>
+      str_remove("/stress/") |>
+      str_remove("/"),
+    .before = file_path_id
+  )|>
+  select(-file_path_id)
+
+```
+
+
+## Exercise 19.7 - Convert ‘get ID’ code into a function
+
+```{r}
+#| eval: false
+#' Convert "get ID" code into a function.
+#'
+#' @param Data with `file_path_id` column.
+#'
+#' @returns A data frame/tibble.
+#' 
+get_participant_id <- function(data) {
+   data_with_id <- data |>
+  dplyr::mutate(
+    id = stringr::str_extract(
+      file_path_id,
+      pattern = "/stress/[:alnum:]{2}/"
+    ) |>
+      stringr::str_remove("/stress/") |>
+      stringr::str_remove("/"),
+    .before = file_path_id
+  )|>
+  dplyr::select(-file_path_id)
+  
+  return(data_with_id)
+}
+
+```
+
+```{r}
+hr_data_with_id <- get_participant_id(hr_data)
+
+hr_data_with_id
 ```
 
 
