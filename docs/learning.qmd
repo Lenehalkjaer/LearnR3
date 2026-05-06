@@ -13,13 +13,15 @@ format: html
 ```{r setup}
 library(tidyverse)
 library(here)
-library(snakecase)
+library(fs)
+source(here("R/functions.R"))
 ```
 
 
 ## Importing new data
 #### Here fortæller R hvor den skal finde data (her skal du skrive ud i hvilken mappe den skal lede efter data, skråstregen går videre i rækken af mapper).Read_csv fortæller R, at den faktisk skal hente data. Ved at bruge hjælpefunktionen (show_col_types) inde i read_csv fjerner du Rs gæt på hvad der er i hver kolonne. Hjælpefunktionen (name_repair) inde i read_csv skriver R navnet på fx. kolonnerne ud med underscore mellem de forskellige ord og skriver alt med små bogstaver. Hjælpefunktionen n_max fortæller R kun at hente fx. 100 kolonner. Ved at stå i code cunk og trykke command+shift+p og vælge style active funktion optimerer R udseendet på din kode, så den bliver mere readibel. 
 ```{r}
+#| eval: false
 here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
   read_csv(
     show_col_types = FALSE,
@@ -31,6 +33,7 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
 
 ## Exercise 15.6 - reading other files. 
 ```{r}
+#| eval: false
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read_csv(
     show_col_types = FALSE,
@@ -39,6 +42,7 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 ```
 ####Samme funktion, men nu med n_max = 100, så vi kun får 100 kolonner i stedet for 23517. 
 ```{r}
+#| eval: false
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read_csv(
     show_col_types = FALSE,
@@ -49,6 +53,7 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 
 #### Prøv igen med en ny deltager og et nyt datasæt uden n_max
 ```{r}
+#| eval: false
 here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
   read_csv(
     show_col_types = FALSE,
@@ -58,6 +63,7 @@ here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
 
 #### Prøv igen med en ny deltager og et nyt datasæt med n_max
 ```{r}
+#| eval: false
 here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
   read_csv(
     show_col_types = FALSE,
@@ -73,6 +79,7 @@ here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
 
 #### For at tilføje noget beskrivelse til din funktion, så stå med markøren i funktionen, tryk command, shift, P og vælg rogygen comment. Her kan du tilføjet en slags titel til hvad funktionen gør, samt hvad der skal indsættes ved de forskellige parameter samt hvad @returns gør. 
 ```{r}
+#| eval: false
 #' Add two numbers together.
 #'
 #' @param num1 A number here.
@@ -92,6 +99,7 @@ add_numbers <- function(num1, num2) {
 ## Lav en funktion, der kan hente forskellige data ind. 
 
 ```{r}
+#| eval: false
 #' Read in one nurses' stress data file
 #'
 #' @param a path to a data file
@@ -123,6 +131,7 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 
 ### Exercise 16.7
 ```{r}
+#| eval: false
 #' Read in one nurses' stress data file
 #'
 #' @param a path to a data file
@@ -139,6 +148,8 @@ read <- function(file_path, max_rows = 100) {
     )
   return(data)
 }
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read()
 ```
 
 ```{r}
@@ -153,4 +164,23 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 # Outputs all rows (`Inf` means infinity)
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read(max_rows = Inf)
+```
+
+
+## Using map
+### recurse fortælle R at den skal lede videre ned i undermapper. 
+### Når du skriver hr_files (altså den variabel du har lavet) nederst fortæller du R at den skal vise dig outputtet af det du har bedt R om. 
+##list_rbind betyder at vi row-binder, så vi får en lang tabel med hr data og ikke en masse forskellige tabeller med hr data. Ved at sætte names_to ind, så får vi id på hr_data
+
+```{r}
+hr_files <- here("data-raw/nurses-stress") |>
+  dir_ls(regexp = "HR.csv.gz", recurse = TRUE)
+
+hr_files
+
+hr_data <- hr_files |>
+  map(read) |> # no brackets!
+  list_rbind(names_to = "file_path_id")
+
+hr_data
 ```
