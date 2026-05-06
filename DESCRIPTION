@@ -10,6 +10,7 @@ Imports:
     here,
     purrr,
     readr,
-    snakecase
+    snakecase,
+    tidyselect
 Depends: 
     tidyverse
